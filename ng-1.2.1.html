@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Angular 1.2.1 Example</title>
+        <script src="https://code.angularjs.org/1.2.1/angular.js"></script> 
+    </head>
+    <body ng-app="onetwoone">
+        <h1 ng-controller="titleCtrl as ctrl">{{ctrl.title}}</h1>
+        <div ng-controller="sequenceCtrl as ctrl">
+            <div style="border: solid 1px black; background: yellow; float: left; margin: 5px;"
+                ng-repeat="item in ctrl.seq track by $index" 
+                ng-style="{'width' : item*10, 'height' : item*10}"></div>
+        </div>
+        <script>
+            (function (app) {
+
+                function Service() {
+                    this.x = 1;
+                    this.xn = 1;
+                }
+
+                Service.prototype.next = function () {
+                    var next = this.x; 
+                    this.x = this.xn; 
+                    this.xn = next + this.x; 
+                    return next;
+                };
+
+                function TitleController() {
+                    this.title = 'Angular 1.2.1 Example';
+                }
+
+                function SequenceController(svc) {
+                    this.seq = [];
+                    var x = 0;
+                    while (x < 8) {
+                        this.seq.push(svc.next());
+                        x += 1;
+                    } 
+                }
+
+                SequenceController.$inject = ['sequenceSvc'];
+
+                app.controller('titleCtrl', TitleController);
+                app.service('sequenceSvc', Service);
+                app.controller('sequenceCtrl', SequenceController);
+
+            })(angular.module('onetwoone', []));
+        </script>
+    </body>
+</html>

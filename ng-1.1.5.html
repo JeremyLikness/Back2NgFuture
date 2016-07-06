@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Angular 1.1.5 Example</title>
+        <script src="https://code.angularjs.org/1.1.5/angular.js"></script> 
+    </head>
+    <body ng-app="oneonefive">
+        <h1 ng-controller="titleCtrl">{{title}}</h1>
+        <div ng-controller="sequenceCtrl">
+            <div style="border: solid 1px black; background: yellow; float: left; margin: 5px;"
+                ng-repeat="item in seq track by $index" 
+                ng-style="{'width' : item*10, 'height' : item*10}"></div>
+        </div>
+        <script>
+            (function (app) {
+
+                function Service() {
+                    this.x = 1;
+                    this.xn = 1;
+                }
+
+                Service.prototype.next = function () {
+                    var next = this.x; 
+                    this.x = this.xn; 
+                    this.xn = next + this.x; 
+                    return next;
+                };
+                
+                app.controller('titleCtrl', ['$scope', function (scope) {
+                    scope.title = 'Angular 1.1.5 Example';
+                }]);
+
+                app.service('sequenceSvc', Service);
+
+                app.controller('sequenceCtrl', ['$scope', 'sequenceSvc', function (scope, svc) {
+                    scope.seq = [];
+                    var x = 0;
+                    while (x < 8) {
+                        scope.seq.push(svc.next());
+                        x += 1;
+                    }
+                }]);
+
+            })(angular.module('oneonefive', []));
+        </script>
+    </body>
+</html>
