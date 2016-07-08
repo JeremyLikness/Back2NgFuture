@@ -1,9 +1,14 @@
 <html>
     <head>
-        <title>Angular 2.0.0-beta.9 Example</title>
-        <script src="https://code.angularjs.org/2.0.0-beta.9/Rx.umd.js"></script>
-        <script src="https://code.angularjs.org/2.0.0-beta.9/angular2-polyfills.js"></script>
-        <script src="https://code.angularjs.org/2.0.0-beta.9/angular2-all.umd.dev.js"></script> 
+        <title>Angular 2.0.0-rc.3 Example</title>
+        <script src="https://npmcdn.com/rxjs@5.0.0-beta.7/bundles/Rx.umd.js"></script>
+        <script src="https://npmcdn.com/reflect-metadata@0.1.3"></script>
+        <script src="https://npmcdn.com/zone.js@0.6.12"></script>
+        <script src="https://npmcdn.com/@angular/core@2.0.0-rc.3/bundles/core.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/common@2.0.0-rc.3/bundles/common.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/compiler@2.0.0-rc.3/bundles/compiler.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/platform-browser@2.0.0-rc.3/bundles/platform-browser.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/platform-browser-dynamic@2.0.0-rc.3/bundles/platform-browser-dynamic.umd.js"></script>
     </head>
     <body>
         <sequence-app>Initializing Angular 2</sequence-app>
@@ -23,7 +28,7 @@
                 };
 
                 function TitleComponent() {
-                    this.title = 'Angular 2.0.0-beta.9 Example';
+                    this.title = 'Angular 2.0.0-rc.3 Example';
                 }
 
                 TitleComponent.annotations = [
@@ -56,7 +61,7 @@
 
                 var SequenceComponent = ng.core.Component({
                     selector: 'sequence', 
-                    template: '<square *ngFor="var i of seq" [size]="i"></square>',
+                    template: '<square *ngFor="let i of seq" [size]="i"></square>',
                     viewProviders: [Service],
                     directives: [ng.common.NgFor, SquareComponent]
                 }).Class({
@@ -79,7 +84,7 @@
                 });
             
                 document.addEventListener("DOMContentLoaded", function() {
-                    ng.platform.browser.bootstrap(AppComponent);
+                    ng.platformBrowserDynamic.bootstrap(AppComponent);
                 });
 
             }());
