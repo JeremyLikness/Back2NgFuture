@@ -36,8 +36,6 @@
                     return next;
                 };
 
-                app.service('sequenceSvc', Service);
-                
                 <!-- title.Component.js -->
 
                 function TitleController() {
@@ -77,7 +75,7 @@
                 var SequenceComponent = ng.core.Component({
                     selector: 'sequence', 
                     template: '<square *ngFor="let i of seq" [size]="i"></square>',
-                    viewProviders: [Service],
+                    //viewProviders: [Service],
                     directives: [ng.common.NgFor, SquareComponent]
                 }).Class({
                     constructor: [Service, function (service) {
@@ -93,6 +91,8 @@
                 <!-- app.Component.js -->
 
                 var ng2 = new ng.upgrade.UpgradeAdapter();
+
+                ng2.addProvider(Service);
 
                 var AppComponent = ng.core.Component({
                     selector: 'sequenceApp',
