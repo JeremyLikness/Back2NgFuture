@@ -13,6 +13,8 @@
         <script>
             (function (app) {
 
+                <!-- sequenceService.js -->
+
                 function Service() {
                     this.x = 1;
                     this.xn = 1;
@@ -24,12 +26,16 @@
                     this.xn = next + this.x; 
                     return next;
                 };
-                
+
+                app.service('sequenceSvc', Service);
+
+                <!-- titleController.js --> 
+
                 app.controller('titleCtrl', ['$scope', function (scope) {
                     scope.title = 'Angular 1.1.5 Example';
                 }]);
 
-                app.service('sequenceSvc', Service);
+                <!-- sequenceController.js --> 
 
                 app.controller('sequenceCtrl', ['$scope', 'sequenceSvc', function (scope, svc) {
                     scope.seq = [];

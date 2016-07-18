@@ -1,6 +1,7 @@
 <html>
     <head>
-        <title>Angular 2.0.0-rc.3 Example</title>
+        <title>Angular 1.5.7 Upgrade Example</title>
+        <script src="https://code.angularjs.org/1.5.7/angular.js"></script> 
         <script src="https://npmcdn.com/rxjs@5.0.0-beta.7/bundles/Rx.umd.js"></script>
         <script src="https://npmcdn.com/reflect-metadata@0.1.3"></script>
         <script src="https://npmcdn.com/zone.js@0.6.12"></script>
@@ -9,13 +10,19 @@
         <script src="https://npmcdn.com/@angular/compiler@2.0.0-rc.3/bundles/compiler.umd.js"></script>
         <script src="https://npmcdn.com/@angular/platform-browser@2.0.0-rc.3/bundles/platform-browser.umd.js"></script>
         <script src="https://npmcdn.com/@angular/platform-browser-dynamic@2.0.0-rc.3/bundles/platform-browser-dynamic.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/upgrade@2.0.0-rc.3/bundles/upgrade.umd.js"></script>
     </head>
     <body>
-        <sequence-app>Initializing Angular 2</sequence-app>
-        <script type="text/javascript">
-            (function() {
+        <script type="text/ng-template" id="sequence.html">
+           <div style="border: solid 1px black; background: yellow; float: left; margin: 5px;"
+                ng-repeat="item in $ctrl.seq track by $index" 
+                ng-style="{'width' : item*10, 'height' : item*10}"></div>
+        </script>
+        <sequence-app></sequence-app>
+        <script>
+            (function (app) {
 
-                <!-- sequence.Service.js -->
+                <!-- sequenceService.js -->
 
                 function Service() {
                     this.x = 1;
@@ -29,18 +36,18 @@
                     return next;
                 };
 
+                app.service('sequenceSvc', Service);
+                
                 <!-- title.Component.js -->
 
-                function TitleComponent() {
-                    this.title = 'Angular 2.0.0-rc.3 Example';
+                function TitleController() {
+                    this.title = 'Angular 1.5.7 Upgraded to 2 Example';
                 }
 
-                TitleComponent.annotations = [
-                    new ng.core.Component({
-                        selector: 'app-title',
-                        template: '<h1>{{title}}</h1>'
-                    })
-                ];
+                app.component('appTitle', {
+                    controller: TitleController,
+                    template: '<h1>{{$ctrl.title}}</h1>'
+                });
 
                 <!-- square.Component.js -->
 
@@ -65,7 +72,7 @@
                     })
                 ];
 
-                <!-- sequence.Component.js -->
+                <!-- sequence.Component.js --> 
 
                 var SequenceComponent = ng.core.Component({
                     selector: 'sequence', 
@@ -85,21 +92,21 @@
 
                 <!-- app.Component.js -->
 
+                var ng2 = new ng.upgrade.UpgradeAdapter();
+
                 var AppComponent = ng.core.Component({
-                    selector: 'sequence-app',
+                    selector: 'sequenceApp',
                     template: '<div><app-title></app-title><sequence></sequence></div>',
-                    directives: [TitleComponent, SequenceComponent]
+                    directives: [ng2.upgradeNg1Component('appTitle'), SequenceComponent]
                 }).Class({
                     constructor: function () {}
                 });
 
-                <!-- main.js --> 
+                app.directive('sequenceApp', ng2.downgradeNg2Component(AppComponent));
 
-                document.addEventListener("DOMContentLoaded", function() {
-                    ng.platformBrowserDynamic.bootstrap(AppComponent);
-                });
+                ng2.bootstrap(document.body, ['onefiveseven-2']);
 
-            }());
+            })(angular.module('onefiveseven-2', []));
         </script>
     </body>
 </html>
