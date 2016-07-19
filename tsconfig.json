@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "ng2-typescript.js",
+        "sourceMap": true,
+        "experimentalDecorators": true
+    },
+    "files": [
+        "ng-2.0.0-rc3-typescript.ts"
+    ]
+}
