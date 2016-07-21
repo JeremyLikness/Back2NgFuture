@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <title>Angular 1.5.7 upgraded to 2 Example</title>
+        <script src="https://code.angularjs.org/1.5.7/angular.js"></script> 
+        <script src="https://npmcdn.com/rxjs@5.0.0-beta.7/bundles/Rx.umd.js"></script>
+        <script src="https://npmcdn.com/reflect-metadata@0.1.3"></script>
+        <script src="https://npmcdn.com/zone.js@0.6.12"></script>
+        <script src="https://npmcdn.com/@angular/core@2.0.0-rc.3/bundles/core.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/common@2.0.0-rc.3/bundles/common.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/compiler@2.0.0-rc.3/bundles/compiler.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/platform-browser@2.0.0-rc.3/bundles/platform-browser.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/platform-browser-dynamic@2.0.0-rc.3/bundles/platform-browser-dynamic.umd.js"></script>
+        <script src="https://npmcdn.com/@angular/upgrade@2.0.0-rc.3/bundles/upgrade.umd.js"></script>
+    </head>
+    <body>
+        <script type="text/myTemplate" id="sequence.html">
+           <div style="border: solid 1px black; background: yellow; float: left; margin: 5px;"
+                ng-repeat="item in $ctrl.seq track by $index" 
+                ng-style="{'width' : item*10, 'height' : item*10}"></div>
+        </script>        
+        <sequence-app [app-title]="ng1Title">Loading...</sequence-app>
+        <script>
+            (function (app, ngupd) {
+
+                <!-- sequenceService.js -->
+
+                function Service() {
+                    this.x = 1;
+                    this.xn = 1;
+                }
+
+                Service.prototype.next = function () {
+                    var next = this.x; 
+                    this.x = this.xn; 
+                    this.xn = next + this.x; 
+                    return next;
+                };
+
+                app.service('sequenceSvc', Service);
+
+                <!-- title.Component.js --> 
+
+                function TitleComponent() {
+                    this.title = 'Angular 2.0.0-rc.3 Upgrade Example';
+                }
+
+                TitleComponent.annotations = [
+                    new ng.core.Component({
+                        inputs: ['title'],
+                        selector: 'app-title',
+                        template: '<h1>{{title}}</h1>'
+                    })
+                ];
+
+                <!-- sequenceController.js -->
+
+                function SequenceController(svc) {
+                    this.seq = [];
+                    var x = 0;
+                    while (x < 8) {
+                        this.seq.push(svc.next());
+                        x += 1;
+                    } 
+                }
+
+                SequenceController.$inject = ['sequenceSvc'];
+
+                app.component('sequence', {
+                    controller: SequenceController,
+                    template: document.getElementById('sequence.html').innerText
+                });
+
+                <!-- app.component.js -->
+
+                var AppComponent = ng.core.Component({
+                    inputs: ['appTitle'],
+                    selector: 'sequence-app',
+                    template: '<div><app-title [title]="appTitle"></app-title><sequence></sequence></div>',
+                    directives: [TitleComponent, ngupd.upgradeNg1Component('sequence')]
+                }).Class({
+                    constructor: function () {
+                        this.appTitle = 'Temp';
+                    }
+                });
+
+                app.directive('sequenceApp', ngupd.downgradeNg2Component(AppComponent));
+                app.run(['$rootScope', function (rs) {
+                    rs.ng1Title = 'YES! Ng1 Data-binding to Ng2.';
+                }]);
+                ngupd.bootstrap(document.body, ['oneonefive2']);
+
+            })(angular.module('oneonefive2', []), new ng.upgrade.UpgradeAdapter());
+        </script>
+    </body>
+</html>
